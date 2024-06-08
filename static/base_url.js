@@ -1,1 +1,1 @@
-window.base_url ="http://localhost:80"
+window.base_url ="https://object-detection-omul.onrender.com"

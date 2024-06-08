@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <script src="/base_url.js"></script>
+  <script src="/homeProtector.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+
+</head>
+
+<body style="background-color: black; overflow: hidden">
+  <!-- <section class="vh-100 vy-100 gradient-custom">
+      <div class="container h-100"> -->
+  <div class="row d-flex justify-content-start align-items-start">
+    <div class="col-lg-2 col-md-3 align-self-left">
+      <div class="card mx-1 my-1">
+
+        <div class="card-body">
+          <h5 class="card-title" id="mytitle"></h5>
+          <div id="cardText"></div>
+          <button onclick=logoutuser(event) class="btn btn-outline-dark btn-sm px-5 mt-1 align-self-center"
+            type="submit">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row d-flex justify-content-center align-items-center h-100 v-100">
+
+    <!-- <div id="webcam-container"></div> -->
+    <video class="col-lg-6 col-md-6 " style="width: 400px;height: 400px;" id="webcamVideo" autoplay playsinline></video>
+    <div id="label-container" class="px-5 my-3 align-self-center" style="background-color: white;"></div>
+
+
+  </div>
+  <div class="row d-flex justify-content-center align-items-center h-100 v-100">
+
+    <button class="btn btn-outline-light btn-sm px-5 mt-5 align-self-center" id='start_button' type="button"
+      onclick="init()">Enable Webcam</button>
+    <button class="btn btn-outline-light btn-sm px-5 mt-5 align-self-center" id="stop_button" type="button"
+      style="display: none;" onclick="stop_model()">stop</button>
+  </div>
+
+</body>
+<script>
+  const videoElement = document.getElementById('webcamVideo');
+
+  // Constraints for the media stream
+  const constraints = {
+    video: true, // Use the default camera
+    audio: false // Do not capture audio
+  };
+
+  // Access the webcam stream
+  navigator.mediaDevices.getUserMedia(constraints)
+    .then((stream) => {
+      // Assign the stream to the video element's srcObject
+      videoElement.srcObject = stream;
+    })
+    .catch((error) => {
+      console.error('Error accessing webcam:', error);
+    });
+  function logoutuser(event) {
+    localStorage.removeItem("user_access")
+    window.location = base_url + "/login"
+  }
+  function decodeJWT(token) {
+    const parts = token.split('.');
+    const payload = JSON.parse(atob(parts[1]));
+    return payload;
+  }
+
+  const acccess = localStorage.getItem("user_access")
+  if (acccess) {
+    const decodedtoken = decodeJWT(acccess)
+    console.log(decodedtoken)
+    document.getElementById("mytitle").innerHTML = `Welcome  ${decodedtoken.name}`
+
+  }
+</script>
+<script type="text/javascript" src="/script.js"></script>
+
+</html>
